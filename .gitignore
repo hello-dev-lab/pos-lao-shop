@@ -6,5 +6,6 @@ public/uploads/*
 !public/uploads/.gitkeep
 npm-debug.log*
 .env
+logs/
 .DS_Store
 Thumbs.db
