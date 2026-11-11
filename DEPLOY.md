@@ -1,104 +1,81 @@
-# 🚀 ຄູ່ມື Deploy: Cloudflare Pages + Render
+# 🚀 ຄູ່ມືເຮັດໃຫ້ເວັບມີລິ້ງຖາວອນ
 
-ເປົ້າໝາຍ: ໃຫ້ເວັບມີລິ້ງ `https://xxx.pages.dev` ແບບຄົງທີ່ ແລະ ອໍເດີ້ຍັງໃຊ້ໄດ້ຈິງ.
+## ສະຖານະປັດຈຸບັນ
 
-## ສະຖາປັດຕະຍະກຳ
-
-```
-ລູກຄ້າ ──► https://xxx.pages.dev        (Cloudflare Pages = HTML/CSS/JS)
-                    │
-                    │  fetch /api/...  (CORS)
-                    ▼
-             https://xxx.onrender.com      (Node.js + Express + db.json + uploads)
-```
-
-- `public/js/config.js` ເປັນບ່ອນຕັ້ງທີ່ຢູ່ API (`apiBase`)
-- ຮູບທີ່ອັບໂຫຼດ (`/uploads/...`) ຈະຖືກຕໍ່ `apiBase` ອັດຕະໂນມັດຜ່ານ `mediaUrl()`
+| ຢ່າງ | ສະຖານະ |
+|---|---|
+| ໂຄ້ດ | ✅ ຢູ່ https://github.com/hello-dev-lab/pos-lao-shop |
+| Frontend + Backend | ✅ ຢູ່ repo ດຽວກັນ (Express ເສີບ `public/`) |
+| ລິ້ງຖາວອນ | ⏳ ຕ້ອງ deploy ຂຶ້ນ Render (2 ນາທີ) |
 
 ---
 
-## ຂັ້ນຕອນ 1 — ອັບໂຄ້ດຂຶ້ນ GitHub
+## ຂັ້ນຕອນດຽວ — Deploy ຂຶ້ນ Render (ຟຣີ)
 
-```powershell
-cd "C:\Users\Developer\Documents\Default Project"
-git add -A
-git commit -m "feat: split frontend/backend for Cloudflare Pages + Render"
+### ກົດລິ້ງນີ້
+
+**https://render.com/deploy?repo=https://github.com/hello-dev-lab/pos-lao-shop**
+
+1. ກົດ **Sign in with GitHub** (ຖ້າຍັງບໍ່ມີ account ມັນຈະໃຫ້ສ້າງ — ຟຣີ)
+2. ອະນຸຍາດໃຫ້ Render ເຂົ້າ repo `pos-lao-shop`
+3. ກົດ **Apply** / **Create**
+4. ລໍ 2-3 ນາທີ
+
+ຈະໄດ້ລິ້ງຖາວອນ:
+
+```
+https://pos-lao-shop-api.onrender.com
 ```
 
-ຈາກນັ້ນສ້າງ repo ໃໝ່ (private ກໍ່ໄດ້) ຢູ່ https://github.com/new ແລ້ວ:
+> ຊື່ອາດຕ່າງຈາກນີ້ໜ້ອຍໜຶ່ງ ຖ້າຊື່ຊ້ຳ — ເບິ່ງໃນ Render dashboard.
 
-```powershell
-git remote add origin https://github.com/<ຊື່ຜູ້ໃຊ້>/pos-lao-shop.git
-git branch -M main
-git push -u origin main
-```
+### ທົດສອບ
 
-> `data/db.json` ແລະ `public/uploads/*` ຖືກ gitignore ໄວ້ແລ້ວ → ບໍ່ມີຂໍ້ມູນລູກຄ້າຂຶ້ນ GitHub.
+- `https://pos-lao-shop-api.onrender.com` → ໜ້າຮ້ານ
+- `https://pos-lao-shop-api.onrender.com/admin/` → ແອັດມິນ (`admin` / `admin`)
+- `https://pos-lao-shop-api.onrender.com/track.html` → ຕິດຕາມອໍເດີ້
 
 ---
 
-## ຂັ້ນຕອນ 2 — ສ້າງ Backend ເທິງ Render (ຟຣີ)
+## 🎯 ເຮັດທຳອິດຫຼັງ deploy
 
-1. ໄປ https://render.com → Sign in with GitHub
-2. **New → Web Service** → ເລືອກ repo `pos-lao-shop`
-3. ຕັ້ງຄ່າ:
-   - **Runtime**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Plan**: Free
-   - **Environment Variables**:
-     - `NODE_VERSION` = `20`
-     - `CORS_ORIGINS` = `*` (ຫຼື `https://xxx.pages.dev` ຖ້າຮູ້ແລ້ວ)
-4. ກົດ **Create Web Service** ແລ້ວລໍ ~3 ນາທີ
-5. ຈົດລິ້ງທີ່ໄດ້ ເຊັ່ນ `https://pos-lao-shop-api.onrender.com`
-6. ທົດສອບ: ເປີດ `https://pos-lao-shop-api.onrender.com/api/meta`
-
-> ທາງເລືອກ: ຖ້າໃຊ້ `render.yaml` ທີ່ມີຢູ່ ໃຫ້ເລືອກ **New → Blueprint** ແທນ.
+1. ເຂົ້າ `/admin/` → ແລ້ວ **ປ່ຽນລະຫັດຜ່ານ** ຈາກ `admin`/`admin`
+2. ໃສ່ **ເລກບັນຊີທະນາຄານ + ອັບຮູບ QR** ໃນໜ້າຕັ້ງຄ່າ
+3. ອັບຮູບສິນຄ້າຕົວຈິງ
 
 ---
 
-## ຂັ້ນຕອນ 3 — ຕັ້ງ API base ໃນ frontend
-
-ແກ້ໄຟລ໌ `public/js/config.js`:
-
-```js
-window.APP_CONFIG = {
-  apiBase: 'https://pos-lao-shop-api.onrender.com'
-};
-```
-
----
-
-## ຂັ້ນຕອນ 4 — Deploy ຂຶ້ນ Cloudflare Pages
-
-```powershell
-cd "C:\Users\Developer\Documents\Default Project"
-npx --yes wrangler login          # ເປີດ browser ໃຫ້ກົດ Allow (ເຮັດຄັ້ງດຽວ)
-npm run pages:deploy              # ອັບ public/ ຂຶ້ນ Pages
-```
-
-ຈະໄດ້ລິ້ງ: `https://pos-lao-shop.pages.dev`
-
-> ຢາກໄດ້ຊື່ອື່ນ: `npx wrangler pages deploy public --project-name=ຊື່ທີ່ຕ້ອງການ`
-> ແລ້ວກັບໄປແກ້ `CORS_ORIGINS` ໃນ Render ໃຫ້ກົງກັບ `https://ຊື່ນັ້ນ.pages.dev`
-
----
-
-## ⚠️ ຂໍ້ຄວນລະວັງ
+## ⚠️ ຂໍ້ຈຳກັດຂອງ Render ຟຣີ
 
 | ເລື່ອງ | ລາຍລະອຽດ |
 |---|---|
-| **ຂໍ້ມູນຫາຍ** | Render ແຜນຟຣີບໍ່ມີ disk ຖາວອນ — ອໍເດີ້/ຮູບຈະຣີເຊັດທຸກຄັ້ງທີ່ deploy ຫຼື restart |
-| **ແກ້ຖາວອນ** | ຍົກເປັນ Starter ($7/ເດືອນ) + disk → ຕັ້ງ `DATA_DIR=/var/data`, `UPLOAD_DIR=/var/data/uploads` |
-| **ຫຼື** | ຍ້າຍໄປຖານຂໍ້ມູນຟຣີ (Supabase / Neon / MongoDB Atlas) — ຕ້ອງແກ້ `server/db.js` |
-| **ຊ້າຄັ້ງທຳອິດ** | Render ຟຣີ sleep ຫຼັງບໍ່ມີຄົນໃຊ້ 15 ນາທີ → ເປີດທຳອິດຈະຊ້າ ~30 ວິນາທີ |
-| **ລະຫັດແອັດມິນ** | ປ່ຽນຈາກ `admin`/`admin` ກ່ອນເປີດສາທາລະນະ |
+| **ລິ້ງ** | ✅ ຖາວອນ ບໍ່ປ່ຽນ |
+| **Sleep** | ບໍ່ມີຄົນໃຊ້ 15 ນາທີ → ຫຼັບ. ເປີດທຳອິດຊ້າ ~30-50 ວິນາທີ |
+| **ຂໍ້ມູນ** | ❌ ບໍ່ມີ disk ຖາວອນ — ອໍເດີ້/ຮູບຈະຣີເຊັດທຸກຄັ້ງທີ່ deploy ໃໝ່ |
+| **ແກ້ຂໍ້ມູນ** | ຍົກເປັນ Starter $7/ເດືອນ + disk 1GB → ຕັ້ງ `DATA_DIR=/var/data`, `UPLOAD_DIR=/var/data/uploads` |
+
+> ຖ້າຕ້ອງການຂໍ້ມູນຖາວອນແທ້ໂດຍບໍ່ເສຍເງິນ → ຍ້າຍໄປ Supabase / Neon (ຟຣີ) ແລ້ວແກ້ `server/db.js`.
 
 ---
 
-## ທົດສອບຫຼັງ deploy
+## 🔁 ທາງເລືອກ: ໃຊ້ PC ເປັນເຊີບເວີ ແຕ່ໄດ້ໂດເມນຄົງທີ່
 
-1. ເປີດ `https://xxx.pages.dev` → ເຫັນສິນຄ້າ
-2. ກົດເພີ່ມກະຕ່າ → checkout → ສ້າງອໍເດີ້
-3. ເປີດ `https://xxx.pages.dev/admin/` → login → ເຫັນອໍເດີ້ໃໝ່
-4. ຖ້າບໍ່ຂຶ້ນ: ກວດ Console (F12) ວ່າ error CORS ຫຼື `apiBase` ຜິດ
+ຖ້າຢາກໃຊ້ເຄື່ອງນີ້ຕໍ່ (ບໍ່ຂຶ້ນ Render):
+
+1. ສະໝັກຟຣີ https://ngrok.com
+2. ຄັດລອກ **authtoken** ມາໃຫ້
+3. ngrok ຟຣີໃຫ້ **1 ໂດເມນຄົງທີ່** ຮູບແບບ `https://xxxx-yyyy.ngrok-free.app`
+4. ຂ້ອຍຕັ້ງ watchdog ໃຫ້ຮັນຕະຫຼອດ
+
+ຂໍ້ເສຍ: PC ຕ້ອງເປີດຕະຫຼອດ ແລະ ອິນເຕີເນັດຕ້ອງຕໍ່.
+
+---
+
+## 🧰 ເຄື່ອງມືທີ່ມີໃນໂປຣເຈັກ
+
+| ໄຟລ໌ | ໜ້າທີ່ |
+|---|---|
+| `render.yaml` | Blueprint ສຳລັບ Render |
+| `scripts/tunnel-watch.ps1` | ເຝົ້າເຊີບເວີ + tunnel ໃຫ້ຢູ່ຕະຫຼອດ (ໃຊ້ກັບ PC) |
+| `public/js/config.js` | ທີ່ຢູ່ API (`apiBase: ''` = ເຊີບເວີດຽວກັນ) |
+| `logs/public-url.txt` | ລິ້ງ tunnel ປັດຈຸບັນ (ຖ້າໃຊ້ PC) |
