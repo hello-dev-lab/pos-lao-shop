@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ຕິດຕາມອໍເດີ້ — ຮ້ານ ສະບາຍດີ</title>
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=Phetsarath:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-track">
+  <header id="site-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>📦 ຕິດຕາມອໍເດີ້</h1>
+        <p class="muted">ປ້ອນລະຫັດອໍເດີ້ ເພື່ອເບິ່ງສະຖານະ ແລະ ລາຍລະອຽດການຈັດສົ່ງ</p>
+      </div>
+    </div>
+
+    <section class="card" style="max-width:760px;margin:18px auto 0">
+      <div class="track-form">
+        <input id="track-code" placeholder="ປ້ອນລະຫັດ ເຊັ່ນ ORD261108-1234" autocomplete="off" spellcheck="false">
+        <button class="btn btn-blue" id="track-btn">🔎 ຄົ້ນຫາ</button>
+      </div>
+      <div class="form-hint">ລະຫັດອໍເດີ້ຖືກສົ່ງໃຫ້ຫຼັງສັ່ງຊື້ສຳເລັດ — ຮູບແບບ ORD + ວັນທີ + ເລກ</div>
+      <div id="track-error"></div>
+    </section>
+
+    <section id="track-result" style="max-width:900px;margin:20px auto 50px"></section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/track.js"></script>
+</body>
+</html>

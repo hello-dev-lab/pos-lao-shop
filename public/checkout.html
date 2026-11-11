@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ສັ່ງຊື້ & ຈັດສົ່ງ — ຮ້ານ ສະບາຍດີ</title>
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=Phetsarath:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-checkout">
+  <header id="site-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>📝 ສັ່ງຊື້ & ຈັດສົ່ງ</h1>
+        <p class="muted">ປ້ອນຂໍ້ມູນໃຫ້ຄົບ ແລ້ວກົດ "ຢືນຢັນສັ່ງຊື້"</p>
+      </div>
+      <a class="btn btn-ghost" href="/cart.html">← ກັບໄປກະຕ່າ</a>
+    </div>
+
+    <div class="checkout-layout">
+      <div class="checkout-main">
+        <section class="card">
+          <h2>1. ຂໍ້ມູນລູກຄ້າ</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="customer-name">ຊື່ລູກຄ້າ <span class="req">*</span></label>
+              <input id="customer-name" type="text" placeholder="ຊື່ ແລະ ນາມສະກຸນ" autocomplete="name" maxlength="100">
+            </div>
+            <div class="form-field">
+              <label for="customer-phone">ເບີໂທລະສັບ <span class="req">*</span></label>
+              <input id="customer-phone" type="tel" placeholder="020 5555 1234" autocomplete="tel" inputmode="tel" maxlength="20">
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>2. ທີ່ຢູ່ຈັດສົ່ງ & ແຜນທີ່</h2>
+
+          <div class="form-field full">
+            <label for="customer-address">ທີ່ຢູ່ຈັດສົ່ງ <span class="req">*</span></label>
+            <textarea id="customer-address" placeholder="ບ້ານ, ຮ່ອມ, ເມືອງ, ເມືອງຈັນທະບູລີ..." maxlength="300"></textarea>
+          </div>
+
+          <div class="form-field full" style="margin-top:14px">
+            <label for="place-search">ຄົ້ນຫາສະຖານທີ່ (ພິມທີ່ຢູ່ ຫຼື ເບີໂທລູກຄ້າເກົ່າ)</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input id="place-search" class="input" type="text" style="flex:1;min-width:220px;border:1.5px solid #d1d5db"
+                     placeholder="ຕົວຢ່າງ: ວັດສີສະເກດ ຫຼື 020 5555 1234" autocomplete="off">
+              <button type="button" class="btn btn-orange" id="place-search-btn">🔎 ຄົ້ນຫາ</button>
+            </div>
+            <div class="form-hint">💡 ຖ້າປ້ອນເປັນເບີໂທ ລະບົບຈະຄົ້ນຫາທີ່ຢູ່ ແລະ ພິກັດຈາກອໍເດີ້ຄັ້ງກ່ອນໃຫ້</div>
+          </div>
+
+          <div class="location-tools">
+            <button type="button" class="btn btn-blue" id="get-location">📍 Get My Location (GPS)</button>
+            <button type="button" class="btn btn-white" id="clear-location">ລຶບພິກັດ</button>
+          </div>
+
+          <div id="map"></div>
+          <div class="map-coords">
+            <span id="coords-text">📍 ຍັງບໍ່ໄດ້ປັກໝຸດ — ກົດແຜນທີ່ ຫຼື ໃຊ້ GPS</span>
+            <span class="muted" style="font-size:12px">ລາກໝຸດເພື່ອປັບຕຳແໜ່ງ</span>
+          </div>
+
+          <div id="geo-note" class="notice notice-yellow" hidden>
+            ⚠️ GPS ໃຊ້ໄດ້ສະເພາະເວລາເປີດຜ່ານ <strong>localhost</strong> ຫຼື <strong>https://</strong> ເທົ່ານັ້ນ. ຖ້າເປີດຜ່ານ IP ໃນ LAN ແບບ http ມືຖືຈະບໍ່ໃຫ້ດຶງ GPS — ສາມາດປັກໝຸດເອງໄດ້.
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>3. ການຈ່າຍເງິນ</h2>
+          <div class="pay-options">
+            <label class="pay-option">
+              <input type="radio" name="payment" value="cod" checked>
+              <span class="pay-icon">💵</span>
+              <span>
+                <strong>ຈ່າຍປາຍທາງ (Cash on Delivery)</strong>
+                <small>ຈ່າຍເງິນໃຫ້ຄົນສົ່ງເມື່ອຮັບເຄື່ອງແລ້ວ</small>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="bank">
+              <span class="pay-icon">🏦</span>
+              <span>
+                <strong>ໂອນທະນາຄານ / ສະແກນ QR</strong>
+                <small>ສະແກນ QR ຈ່າຍ ແລ້ວອັບໂຫຼດສະລິບຫຼັກຖານ</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="bank-panel" id="bank-panel" hidden>
+            <h3>ຂໍ້ມູນບັນຊີຮ້ານ</h3>
+            <div class="bank-info">
+              <img id="qr-image" src="/img/seed/bank-qr.svg" alt="QR Code ທະນາຄານ">
+              <dl>
+                <dt>ທະນາຄານ</dt>
+                <dd id="bank-name">—</dd>
+                <dt>ຊື່ບັນຊີ</dt>
+                <dd id="bank-account-name">—</dd>
+                <dt>ເລກບັນຊີ</dt>
+                <dd id="bank-account-number">—</dd>
+                <dt>ຍອດຕ້ອງໂອນ</dt>
+                <dd id="bank-amount" style="color:#c2410c;font-size:16px">—</dd>
+              </dl>
+            </div>
+
+            <label class="slip-upload" for="slip-input" id="slip-drop">
+              <input type="file" id="slip-input" accept="image/png,image/jpeg,image/webp,image/gif">
+              <div class="icon">📷</div>
+              <strong id="slip-label">ອັບໂຫຼດສະລິບການໂອນເງິນ</strong>
+              <small>ຮອງຮັບ JPG / PNG / WEBP ຂະໜາດບໍ່ເກີນ 5MB</small>
+            </label>
+
+            <div class="slip-preview" id="slip-preview" hidden>
+              <img id="slip-img" alt="ສະລິບການໂອນເງິນ">
+              <div>
+                <div class="notice notice-green" style="margin:0 0 6px">✅ ອັບໂຫຼດສະລິບສຳເລັດ</div>
+                <button type="button" class="btn btn-red btn-sm" id="slip-remove">ລຶບສະລິບ</button>
+              </div>
+            </div>
+
+            <div class="notice notice-yellow" style="margin-bottom:0">
+              ກະລຸນາໂອນໃຫ້ກົງກັບຍອດລວມ ແລ້ວອັບໂຫຼດສະລິບ. ຮ້ານຈະກວດສອບ ແລະ ຢືນຢັນອໍເດີ້ພາຍໃນໄວໆ.
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>4. ໝາຍເຫດເພີ່ມເຕີມ (ບໍ່ບັງຄັບ)</h2>
+          <textarea id="order-note" class="input" rows="3" maxlength="300"
+                    placeholder="ເຊັ່ນ: ສົ່ງກ່ອນ 12:00, ໂທກ່ອນສົ່ງ, ຢູ່ຮ່ອມດຽວກັນ..." style="resize:vertical"></textarea>
+        </section>
+      </div>
+
+      <aside class="card checkout-summary" id="checkout-summary"></aside>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/checkout.js"></script>
+</body>
+</html>

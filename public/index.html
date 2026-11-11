@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ໜ້າຫຼັກ — ຮ້ານ ສະບາຍດີ</title>
+  <meta name="description" content="ຮ້ານຄ້າອອນໄລ ສິນຄ້າຄຸນນະພາບ ສົ່ງໄວທົ່ວວຽງຈັນ ຈ່າຍປາຍທາງ ຫຼື ໂອນ QR">
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=Phetsarath:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-home">
+  <header id="site-header"></header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">🚚 ສົ່ງໄວທົ່ວນະຄອນຫຼວງວຽງຈັນ</span>
+        <h1>ຊື້ສິນຄ້າຄຸນນະພາບ<br><span class="accent">ຈ່າຍງ່າຍ ສົ່ງໄວ</span></h1>
+        <p class="hero-sub">
+          ເລືອກສິນຄ້າທີ່ຕ້ອງການ ເພີ່ມໃສ່ກະຕ່າ ແລ້ວສັ່ງຊື້ໄດ້ພາຍໃນ 2 ນາທີ.
+          ຮອງຮັບການຈ່າຍເງິນປາຍທາງ (COD) ແລະ ໂອນຜ່ານ QR ທະນາຄານ.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-yellow btn-lg" href="#products">🛍️ ເລືອກຊື້ສິນຄ້າ</a>
+          <a class="btn btn-ghost btn-lg" href="/track.html">📦 ຕິດຕາມອໍເດີ້</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h3>ເປັນຫຍັງຕ້ອງເລືອກຮ້ານເຮົາ?</h3>
+        <div class="perk">
+          <div class="perk-icon">🚚</div>
+          <div><strong>ສົ່ງໄວ ພາຍໃນວັນ</strong><span>ສັ່ງກ່ອນ 16:00 ສົ່ງພາຍໃນວັນດຽວກັນ</span></div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">💵</div>
+          <div><strong>ຈ່າຍປາຍທາງໄດ້</strong><span>ບໍ່ຕ້ອງໂອນກ່ອນ ຮັບເຄື່ອງແລ້ວຈ່າຍ</span></div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">📱</div>
+          <div><strong>ໂອນ QR ສະດວກ</strong><span>ສະແກນ QR ຈ່າຍໄດ້ທຸກທະນາຄານ ແລະ ອັບສະລິບ</span></div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">📍</div>
+          <div><strong>ປັກໝຸດທີ່ຢູ່</strong><span>ດຶງ GPS ຫຼື ຄົ້ນຫາທີ່ຢູ່ ໃຫ້ຄົນສົ່ງຫາໄດ້ງ່າຍ</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="products">
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="search-input" placeholder="ຄົ້ນຫາສິນຄ້າ... (ຊື່ ຫຼື ໝວດ)" autocomplete="off">
+        </div>
+        <select class="input" id="sort-select" style="max-width:200px" aria-label="ຈັດລຽງ">
+          <option value="newest">ລຽງ: ໃໝ່ສຸດ</option>
+          <option value="price-asc">ລາຄາ: ຕໍ່າກ່ອນ</option>
+          <option value="price-desc">ລາຄາ: ສູງກ່ອນ</option>
+          <option value="name">ຊື່: ກ-ຮ</option>
+        </select>
+      </div>
+
+      <div class="chips" id="category-chips"></div>
+      <div class="muted" id="result-count" style="margin:-8px 0 14px;font-size:13px"></div>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

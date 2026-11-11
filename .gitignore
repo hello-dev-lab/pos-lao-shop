@@ -1,0 +1,10 @@
+node_modules/
+data/db.json
+cloudflared.exe
+data/db.json.tmp
+public/uploads/*
+!public/uploads/.gitkeep
+npm-debug.log*
+.env
+.DS_Store
+Thumbs.db

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ກະຕ່າສິນຄ້າ — ຮ້ານ ສະບາຍດີ</title>
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=Phetsarath:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-cart">
+  <header id="site-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>🛒 ກະຕ່າສິນຄ້າ</h1>
+        <p class="muted">ກວດສອບລາຍການ ແລ້ວກົດ "ສັ່ງຊື້" ເພື່ອປ້ອນຂໍ້ມູນຈັດສົ່ງ</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-ghost" href="/index.html">← ເລືອກສິນຄ້າຕື່ມ</a>
+        <button class="btn btn-red" id="clear-cart">🗑️ ລ້າງກະຕ່າ</button>
+      </div>
+    </div>
+
+    <div class="cart-layout">
+      <section class="card" id="cart-card">
+        <div id="cart-items"></div>
+      </section>
+      <aside class="card cart-summary" id="cart-summary"></aside>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/cart.js"></script>
+</body>
+</html>

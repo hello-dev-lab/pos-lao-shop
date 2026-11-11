@@ -1,0 +1,23 @@
+# Render Blueprint — ເອີ້ນ API ຂຶ້ນ Render (ແຜນຟຣີ)
+# ວິທີໃຊ້: push repo ຂຶ້ນ GitHub ແລ້ວໃນ Render ເລືອກ New > Blueprint
+services:
+  - type: web
+    name: pos-lao-shop-api
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/meta
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: CORS_ORIGINS
+        value: "*"
+    # ⚠️ ແຜນຟຣີບໍ່ມີ disk ຖາວອນ — ຂໍ້ມູນຈະຣີເຊັດເມື່ອ deploy ໃໝ່.
+    # ຖ້າຕ້ອງການເກັບຖາວອນ ໃຫ້ຍົກເປັນ Starter ($7/ເດືອນ) ແລ້ວເປີດ disk ຂ້າງລຸ່ມ:
+    # disk:
+    #   name: pos-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # ແລ້ວເພີ່ມ env: DATA_DIR=/var/data, UPLOAD_DIR=/var/data/uploads
