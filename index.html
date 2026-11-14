@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ຮ້ານ ສະບາຍດີ — ກຳລັງເຂົ້າຮ້ານ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Phetsarath+OT:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0b3d2e; --green2:#0f5138; --orange:#f59e0b; --red:#dc2626;
+    --blue:#2563eb; --yellow:#facc15; --ink:#111827;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    background:linear-gradient(180deg,var(--green) 0%,var(--green2) 100%);
+    color:#fff; font-family:'Phetsarath OT','Noto Sans Lao',system-ui,sans-serif;
+    display:flex; flex-direction:column; min-height:100vh;
+  }
+  .topbar{
+    background:var(--orange); color:var(--ink); font-weight:700; font-size:18px;
+    padding:14px 18px; display:flex; align-items:center; gap:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);
+  }
+  .topbar .logo{
+    width:30px;height:30px;border-radius:8px;background:var(--green);
+    display:grid;place-items:center;font-size:16px;
+  }
+  main{
+    flex:1; display:flex; align-items:center; justify-content:center; padding:28px 18px;
+  }
+  .card{
+    width:100%; max-width:520px; background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14); border-radius:20px;
+    padding:32px 24px; text-align:center; backdrop-filter:blur(6px);
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
+  }
+  h1{margin:0 0 8px; font-size:26px; line-height:1.5}
+  p{margin:0 0 18px; font-size:17px; color:#d7e5df; line-height:1.8}
+  .spinner{
+    width:52px;height:52px;margin:0 auto 22px;border-radius:50%;
+    border:5px solid rgba(255,255,255,.18); border-top-color:var(--yellow);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .btn{
+    display:inline-block; text-decoration:none; font-weight:700; font-size:18px;
+    padding:14px 30px; border-radius:12px; color:#fff; background:var(--red);
+    box-shadow:0 8px 22px rgba(220,38,38,.35); transition:transform .15s, filter .15s;
+  }
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.08)}
+  .btn.blue{background:var(--blue); box-shadow:0 8px 22px rgba(37,99,235,.35)}
+  .btn.yellow{background:var(--yellow); color:var(--ink); box-shadow:0 8px 22px rgba(250,204,21,.3)}
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  .note{margin-top:22px;font-size:14px;color:#9fb8ae;line-height:1.9}
+  .hidden{display:none!important}
+  .ok{color:#86efac}
+  .bad{color:#fca5a5}
+</style>
+</head>
+<body>
+  <div class="topbar"><span class="logo">🛒</span> ຮ້ານ ສະບາຍດີ — ລິ້ງທາງການ</div>
+  <main>
+    <div class="card">
+      <div id="spinner" class="spinner"></div>
+      <h1 id="title">ກຳລັງເຂົ້າຮ້ານ...</h1>
+      <p id="msg">ກະລຸນາລໍຖ້ານ້ອຍໜຶ່ງ</p>
+      <div class="row">
+        <a id="go" class="btn hidden" href="#">ເຂົ້າຮ້ານ</a>
+        <a id="retry" class="btn blue hidden" href="javascript:location.reload()">ລອງໃໝ່</a>
+      </div>
+      <div class="row" style="margin-top:16px">
+        <a id="linkTrack" class="btn yellow" href="#">📦 ຕິດຕາມອໍເດີ້</a>
+        <a id="linkAdmin" class="btn blue" href="#">🔐 ແອັດມິນ</a>
+      </div>
+      <p class="note">
+        ລິ້ງນີ້ <b>ຄົງທີ່ ບໍ່ປ່ຽນ</b> — ແບ່ງປັນໃຫ້ລູກຄ້າໄດ້ເລີຍ<br>
+        ຖ້າເຂົ້າບໍ່ໄດ້ ໝາຍຄວາມວ່າເຄື່ອງເຊີບເວີກຳລັງປິດ ຫຼື ເນັດຂາດ
+      </p>
+    </div>
+  </main>
+
+<script>
+(function () {
+  // ລິ້ງ tunnel ປັດຈຸບັນ — watchdog ຈະອັບເດດໃຫ້ອັດຕະໂນມັດ
+  var BASE = "https://storage-dozen-progressive-fare.trycloudflare.com";
+
+  var title = document.getElementById('title');
+  var msg   = document.getElementById('msg');
+  var go    = document.getElementById('go');
+  var retry = document.getElementById('retry');
+  var spin  = document.getElementById('spinner');
+
+  // route: #admin / #track ເຂົ້າໜ້າທີ່ກ່ຽວຂ້ອງ
+  var path = '/';
+  if (location.hash === '#admin') { path = '/admin/'; }
+  else if (location.hash === '#track') { path = '/track.html'; }
+  var TARGET = BASE + path;
+
+  go.href = TARGET;
+  document.getElementById('linkTrack').href = BASE + '/track.html';
+  document.getElementById('linkAdmin').href = BASE + '/admin/';
+
+  function done(ok){
+    spin.classList.add('hidden');
+    if (ok) {
+      title.textContent = 'ຮ້ານເປີດແລ້ວ ✅';
+      msg.innerHTML = 'ກຳລັງພາໄປໜ້າຮ້ານ... <span class="ok">ອອນໄລນ໌</span>';
+      setTimeout(function(){ location.replace(TARGET); }, 700);
+    } else {
+      title.textContent = 'ຕອນນີ້ເຂົ້າຮ້ານບໍ່ໄດ້';
+      msg.innerHTML = 'ເຄື່ອງເຊີບເວີອາດປິດ ຫຼື ເນັດຂາດ <span class="bad">ອອບລາຍ</span><br>ກົດ "ລອງໃໝ່" ອີກຄັ້ງໄດ້';
+      retry.classList.remove('hidden');
+      go.classList.remove('hidden');
+    }
+  }
+
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = setTimeout(function(){ if (ctrl) ctrl.abort(); done(false); }, 9000);
+
+  fetch(BASE + '/api/meta?ping=' + Date.now(), ctrl ? { signal: ctrl.signal, cache: 'no-store' } : { cache: 'no-store' })
+    .then(function(r){ clearTimeout(timer); done(r.ok); })
+    .catch(function(){ clearTimeout(timer); done(false); });
+})();
+</script>
+</body>
+</html>
