@@ -11,15 +11,18 @@ function Write-BootLog([string]$m) {
   Add-Content -Path $BootLog -Value ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $m) -Encoding UTF8
 }
 
+# only count real "-File ... tunnel-watch.ps1" invocations (ignore shells whose text mentions it)
 $running = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" |
-           Where-Object { $_.CommandLine -like '*tunnel-watch.ps1*' }
+           Where-Object { $_.CommandLine -like '*-File*tunnel-watch.ps1*' -and $_.CommandLine -notlike '*-Command*' }
 
 if ($running) {
-  Write-BootLog 'watchdog already running - skip'
+  $ids = ($running | ForEach-Object { $_.ProcessId }) -join ','
+  Write-BootLog ("watchdog already running - skip (pids: $ids)")
   exit 0
 }
 
+$Watch = Join-Path $PSScriptRoot 'tunnel-watch.ps1'
+$args = '-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{0}"' -f $Watch
+
 Write-BootLog 'starting watchdog'
-Start-Process -FilePath 'powershell.exe' `
-  -ArgumentList '-NoProfile','-WindowStyle','Hidden','-ExecutionPolicy','Bypass','-File',(Join-Path $PSScriptRoot 'tunnel-watch.ps1') `
-  -WorkingDirectory $Root -WindowStyle Hidden
+Start-Process -FilePath 'powershell.exe' -ArgumentList $args -WorkingDirectory $Root -WindowStyle Hidden
