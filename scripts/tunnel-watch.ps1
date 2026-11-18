@@ -119,7 +119,9 @@ function Start-Tunnel {
     foreach ($f in @($CfErr, $CfLog)) {
       if (-not (Test-Path $f)) { continue }
       $m = Select-String -Path $f -Pattern 'https://[a-z0-9-]+\.trycloudflare\.com' -AllMatches -ErrorAction SilentlyContinue |
-           ForEach-Object { $_.Matches.Value } | Select-Object -First 1
+           ForEach-Object { $_.Matches.Value } |
+           Where-Object { $_ -notlike 'https://api.trycloudflare.com*' } |
+           Select-Object -First 1
       if ($m) { $url = $m; break }
     }
     if ($url) {
