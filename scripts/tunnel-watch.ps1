@@ -73,22 +73,28 @@ function Update-Pages([string]$url) {
     $H = Get-GitHubHeaders
     if (-not $H) { Write-Log 'pages: no github credential'; return }
 
-    $raw = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/contents/index.html?ref=gh-pages" -f $GhRepo) -Headers $H -TimeoutSec 40
-    $clean = ([string]$raw.content) -replace '\s', ''
-    $bytes = [Convert]::FromBase64String($clean)
-    $html = [Text.Encoding]::UTF8.GetString($bytes)
+    # current gh-pages head + tree
+    $head = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/ref/heads/gh-pages" -f $GhRepo) -Headers $H -TimeoutSec 30
+    $headSha = $head.object.sha
+    $headCommit = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/commits/{1}" -f $GhRepo, $headSha) -Headers $H -TimeoutSec 30
+    $baseTree = $headCommit.tree.sha
 
-    $newHtml = [regex]::Replace($html, 'var BASE = "https://[^"]*";', ('var BASE = "' + $url + '";'))
-    if ($newHtml -eq $html) { Write-Log 'pages: already up to date'; return }
+    # already correct?
+    try {
+      $raw = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/contents/current.json?ref=gh-pages" -f $GhRepo) -Headers $H -TimeoutSec 30
+      $clean = ([string]$raw.content) -replace '\s', ''
+      $cur = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($clean)) | ConvertFrom-Json
+      if ($cur.url -eq $url) { Write-Log 'pages: already up to date'; return }
+    } catch { }
 
-    $blobBody = @{ content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($newHtml)); encoding = 'base64' } | ConvertTo-Json -Compress
+    $json = @{ url = $url; updated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') } | ConvertTo-Json -Compress
+    $blobBody = @{ content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json)); encoding = 'base64' } | ConvertTo-Json -Compress
     $blob = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/blobs" -f $GhRepo) -Method Post -Headers $H -Body $blobBody -ContentType 'application/json' -TimeoutSec 40
 
-    $treeBody = @{ tree = @(@{ path = 'index.html'; mode = '100644'; type = 'blob'; sha = $blob.sha }) } | ConvertTo-Json -Compress -Depth 5
+    $treeBody = @{ base_tree = $baseTree; tree = @(@{ path = 'current.json'; mode = '100644'; type = 'blob'; sha = $blob.sha }) } | ConvertTo-Json -Compress -Depth 5
     $tree = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/trees" -f $GhRepo) -Method Post -Headers $H -Body $treeBody -ContentType 'application/json' -TimeoutSec 40
 
-    $head = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/ref/heads/gh-pages" -f $GhRepo) -Headers $H -TimeoutSec 30
-    $commitBody = @{ message = 'chore: point entry page at current tunnel'; tree = $tree.sha; parents = @($head.object.sha) } | ConvertTo-Json -Compress -Depth 5
+    $commitBody = @{ message = 'chore: point entry page at current tunnel'; tree = $tree.sha; parents = @($headSha) } | ConvertTo-Json -Compress -Depth 5
     $commit = Invoke-RestMethod -Uri ("https://api.github.com/repos/{0}/git/commits" -f $GhRepo) -Method Post -Headers $H -Body $commitBody -ContentType 'application/json' -TimeoutSec 40
 
     $upd = @{ sha = $commit.sha; force = $true } | ConvertTo-Json -Compress
